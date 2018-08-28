@@ -1,0 +1,14 @@
+username = 'gend'
+hostname = '192.168.0.9'
+password = 'zaq12wsx'
+
+msg = hostname
+strconcat msg ':22 /ssh /auth=password /user='
+strconcat msg username
+strconcat msg ' /passwd='
+strconcat msg password
+connect msg
+wait '~$'
+sendln 'sudo su -'
+wait '~#'
+sendln 'shutdown -h now'
