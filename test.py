@@ -1,3 +1,5 @@
 import subprocess
 
-subprocess.run("dir", shell=True)
+cmd = "aws ec2 describe-regions --output table"
+
+subprocess.run(cmd, shell=True)
