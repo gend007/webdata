@@ -1,5 +1,7 @@
 import subprocess
 
-cmd = "aws ec2 describe-regions --output table"
+cmd = "aws ec2 describe-instances --query Reservations[*].Instances[*].InstanceId"
 
-subprocess.run(cmd, shell=True)
+output = subprocess.check_output(cmd, shell=True)
+
+print (output.decode('sjis'))
