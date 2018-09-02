@@ -1,4 +1,5 @@
 import subprocess
+import sys
 
 ### セキュリティグループ作成用変数
 sg_name = "test"
@@ -8,7 +9,7 @@ port_id = "80"
 ip_add = "223.218.160.243/32"
 
 err_c = 1
-nomal_c = 0
+normal_c = 0
 
 ### セキュリティグループ作成
 cmd_sg = "aws ec2 create-security-group --group-name " + sg_name + " --vpc-id " + vpc_id + " --description " + des + " --output text"
@@ -23,4 +24,4 @@ cmd_sg_in = "aws ec2 authorize-security-group-ingress --group-id " + group_id.de
 #print(cmd_sg_in.strip())
 subprocess.run(cmd_sg_in, shell=True)
 
-sys.exit(nomal_c)
+sys.exit(normal_c)
