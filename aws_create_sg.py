@@ -3,9 +3,9 @@ import sys
 
 ### セキュリティグループ作成用変数
 sg_name = "test"
-vpc_id = "vpc-d1dc8bb6"
+vpc_id = "vpc-0445de4659d0116cd"
 des = "test_sg"
-port_id = "80"
+port_id = "22"
 ip_add = "223.218.160.243/32"
 
 err_c = 1
