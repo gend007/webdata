@@ -16,6 +16,7 @@ cmd_vpc = "aws ec2 create-vpc --cidr-block " + cidr_ip +  ' --query "Vpc.VpcId"'
 try:
     vpc_id = subprocess.check_output(cmd_vpc, shell=True)
     vpc_id = vpc_id.decode('sjis').strip()
+    print("VPC ID: " + vpc_id)
 except subprocess.CalledProcessError as e:
     sys.exit(err_c)
 
@@ -26,6 +27,7 @@ cmd_subnet = "aws ec2 create-subnet --vpc-id " + vpc_id + " --cidr-block " + sub
 try:
     subunet_id = subprocess.check_output(cmd_subnet, shell=True)
     subunet_id = subunet_id.decode('sjis').strip()
+    print("SubNet ID: " + subunet_id)
 except subprocess.CalledProcessError as e:
     sys.exit(err_c)
 
@@ -68,3 +70,5 @@ cmd_rt_map = "aws ec2 associate-route-table --route-table-id " + rt_id + " --sub
 rc = subprocess.run(cmd_rt_map, shell=True, stdout=subprocess.DEVNULL)
 if rc == err_c:
     sys.exit(err_c)
+
+print("success!!  Create VPC")
