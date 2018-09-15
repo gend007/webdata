@@ -5,8 +5,8 @@ import sys
 err_c = 1
 
 ### VPC作成用変数
-cidr_ip = "10.123.40.0/24"
-subnet_ip = "10.123.40.0/28"
+cidr_ip = "10.123.40.0/16"
+subnet_ip_list = ["10.123.40.0/28", "10.123.50.0/28"]
 dist_ip = "0.0.0.0/0"
 
 
@@ -22,12 +22,16 @@ except subprocess.CalledProcessError as e:
 
 
 ### サブネットの作成
-cmd_subnet = "aws ec2 create-subnet --vpc-id " + vpc_id + " --cidr-block " + subnet_ip + \
-              ' --query "Subnet.SubnetId"'
 try:
-    subunet_id = subprocess.check_output(cmd_subnet, shell=True)
-    subunet_id = subunet_id.decode('sjis').strip()
-    print("SubNet ID: " + subunet_id)
+    i = 0
+    subunet_id = []
+    for ip_list in subnet_ip_list:
+        cmd_subnet = "aws ec2 create-subnet --vpc-id " + vpc_id + " --cidr-block " + ip_list + \
+                     ' --query "Subnet.SubnetId"'
+        tmp = subprocess.check_output(cmd_subnet, shell=True)
+        subunet_id.append(tmp.decode('sjis').strip())
+        print("SubNet ID: " + subunet_id[i])
+        i = i + 1
 except subprocess.CalledProcessError as e:
     sys.exit(err_c)
 
@@ -66,9 +70,10 @@ if rc == err_c:
 
 
 ### ルートテーブルへのマッピング
-cmd_rt_map = "aws ec2 associate-route-table --route-table-id " + rt_id + " --subnet-id " + subunet_id
-rc = subprocess.run(cmd_rt_map, shell=True, stdout=subprocess.DEVNULL)
-if rc == err_c:
-    sys.exit(err_c)
+for subnet_list in subunet_id:
+    cmd_rt_map = "aws ec2 associate-route-table --route-table-id " + rt_id + " --subnet-id " + subnet_list
+    rc = subprocess.run(cmd_rt_map, shell=True, stdout=subprocess.DEVNULL)
+    if rc == err_c:
+        sys.exit(err_c)
 
 print("success!!  Create VPC")
