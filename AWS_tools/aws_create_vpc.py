@@ -7,6 +7,7 @@ err_c = 1
 ### VPC作成用変数
 cidr_ip = "10.123.40.0/16"
 subnet_ip_list = ["10.123.40.0/28", "10.123.50.0/28"]
+zonename = ["",""]
 dist_ip = "0.0.0.0/0"
 
 
@@ -27,7 +28,7 @@ try:
     subunet_id = []
     for ip_list in subnet_ip_list:
         cmd_subnet = "aws ec2 create-subnet --vpc-id " + vpc_id + " --cidr-block " + ip_list + \
-                     ' --query "Subnet.SubnetId"'
+                     "--availability-zone " + zonename + ' --query "Subnet.SubnetId"'
         tmp = subprocess.check_output(cmd_subnet, shell=True)
         subunet_id.append(tmp.decode('sjis').strip())
         print("SubNet ID: " + subunet_id[i])
